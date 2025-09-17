@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Components/Header'; 
 import Footer from './Components/Footer'; 
 
+
 const PageStyles = () => (
   <style>{`
     /* --- Basic Setup & Variables --- */
@@ -323,7 +324,6 @@ function App() {
     <>
       <PageStyles />
       <Header />  
-
       <main className="hero">
         <div className="hero-bg-shapes">
           <div className="shape shape-1"></div>
