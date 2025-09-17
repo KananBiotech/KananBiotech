@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { FaPaperPlane, FaChevronDown, FaMagnifyingGlass } from 'react-icons/fa6';
+import React from 'react';
+import Header from './Components/Header'; 
+import Footer from './Components/Footer'; 
 
 const PageStyles = () => (
   <style>{`
@@ -226,66 +227,102 @@ const PageStyles = () => (
         .img-large { height: 250px; }
         .img-small-1, .img-small-2 { height: 150px; }
     }
-        /* Add this to your <style> tag or CSS file */
-.login-btn {
-  /* Reusing some styles from .cta-button for consistency */
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  text-decoration: none;
-  padding: 0.6rem 1.2rem; /* Adjusted padding */
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9rem; /* Adjusted font size */
-  display: inline-block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* Login button styles */
+    .login-btn {
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-block;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    /* --- Footer Section --- */
+.footer-container {
+  background-color: var(--secondary-color);
+  padding: 4rem 5% 2rem;
+  color: #e0e0e0;
 }
-
-.login-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.footer-column h3, .footer-column h4 {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.footer-column p {
+  line-height: 1.7;
+}
+.footer-links {
+  list-style: none;
+}
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+.footer-links a {
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.footer-links a:hover {
+  color: var(--button-bg);
+}
+.contact-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.contact-icon {
+  color: var(--primary-color);
+}
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+.social-icons a {
+  color: var(--secondary-color);
+  background-color: var(--text-color);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.social-icons a:hover {
+  transform: translateY(-3px);
+  background-color: var(--button-bg);
+}
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--primary-color);
+  font-size: 0.9rem;
 }
   `}</style>
 );
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const closeMenu = () => setIsMenuOpen(false);
-
   return (
     <>
       <PageStyles />
-      <header className="header">
-        <nav className="navbar">
-          <a href="#home" className="nav-logo">
-            Kanan Biotech
-          </a>
-          <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-            <li className="nav-item"><a href="#home" className="nav-link" onClick={closeMenu}>Home <FaChevronDown className="icon" /></a></li>
-            <li className="nav-item"><a href="#tips" className="nav-link" onClick={closeMenu}>Product Views <FaChevronDown className="icon" /></a></li>
-            <li className="nav-item"><a href="#explore" className="nav-link" onClick={closeMenu}>Explore Our Products<FaChevronDown className="icon" /></a></li>
-            <li className="nav-item"><a href="#contact" className="nav-link" onClick={closeMenu}>Contact Us<FaChevronDown className="icon" /></a></li>
-          </ul>
-          <div className="nav-actions">
-            <button className="search-btn" aria-label="Search">
-              <FaMagnifyingGlass className="icon" />
-            </button>
-          </div>
-          <div className="flex items-center gap-4"> {/* A container for both actions */}
-            {/* Search Button (Unchanged) */}
-            
-
-            {/* Corrected Login Link */}
-            <a href="/login" className="login-btn">
-              Log In
-            </a>
-          </div>
-          <div className={`hamburger ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <span className="bar"></span>
-            <span className="bar"></span>
-            <span className="bar"></span>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <main className="hero">
         <div className="hero-bg-shapes">
@@ -295,18 +332,19 @@ function App() {
         <div className="hero-content">
           <div className="hero-text">
             <h1>Explore Biotech</h1>
-            <p>We have many products according to agreculture for you every day, don't miss out. Login! our web page for grow your agreculture.</p>
+            <p>We have many products according to agriculture for you every day, don't miss out. Login! our web page for grow your agriculture.</p>
             <a href="#booking" className="cta-button">Visit & Details</a>
           </div>
           <div className="hero-images">
             <div className="image-grid">
-              <img src="/public/Photo1.jpeg" alt="AppImageError404-1" className="img-large" />
-              <img src="/public/Photo2.webp" alt="AppImageError404-2" className="img-small-1" />
-              <img src="/public/Photo3.webp" alt="AppImageError404-3" className="img-small-2" />
+              <video src="/Video1.mp4" alt="Biotech lab equipment" className="img-large" autoPlay loop muted></video>
+              <img src="/Img5.webp" alt="Farmer in a field" className="img-small-1" />
+              <img src="/Photo1.jpeg" alt="Close-up of a plant" className="img-small-2" />
             </div>
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

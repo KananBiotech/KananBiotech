@@ -13,7 +13,7 @@ const Dashboard = () => {
             />
 
             <div className='pt-30 px-10'>
-                hello, you are in Dashboard UPOLABDHI...
+                hello, you are in Dashboard KananBiotech...
             </div>
             <Footer />
         </div>
