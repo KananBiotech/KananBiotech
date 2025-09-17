@@ -9,7 +9,7 @@ const Header = () => {
     <header className="header">
       <nav className="navbar">
         <a href="#home" className="nav-logo">
-          Kanan Biotech
+          KANAN BIOTECH
         </a>
 
         <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
@@ -20,7 +20,7 @@ const Header = () => {
         </ul>
 
         {/* Container for action buttons */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           <button className="search-btn" aria-label="Search">
             <FaMagnifyingGlass className="icon" />
           </button>

@@ -37,13 +37,13 @@ const PageStyles = () => (
         margin: 0 auto;
     }
     .nav-logo {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 700;
         color: var(--text-color);
         text-decoration: none;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
         animation: fadeInDown 0.8s ease-out;
     }
     .nav-menu {
@@ -232,10 +232,10 @@ const PageStyles = () => (
       background-color: var(--button-bg);
       color: var(--button-text);
       text-decoration: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.6rem 1.1rem;
       border-radius: 50px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       display: inline-block;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -322,7 +322,7 @@ function App() {
   return (
     <>
       <PageStyles />
-      <Header />
+      <Header />  
 
       <main className="hero">
         <div className="hero-bg-shapes">

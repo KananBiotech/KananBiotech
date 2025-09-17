@@ -30,7 +30,7 @@ const Footer = () => {
           </p>
           <p className="contact-info">
             <FaPhone className="contact-icon" />
-            +91 96792 46607
+            +91 80019 49805
           </p>
           <p className="contact-info">
             <FaEnvelope className="contact-icon" />
