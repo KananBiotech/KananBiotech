@@ -300,9 +300,9 @@ function App() {
           </div>
           <div className="hero-images">
             <div className="image-grid">
-              <img src="public\Photo1.jpeg" alt="AppImageError404-1" className="img-large" />
-              <img src="public\Photo2.webp" alt="AppImageError404-2" className="img-small-1" />
-              <img src="public\Photo3.webp" alt="AppImageError404-3" className="img-small-2" />
+              <img src="/public/Photo1.jpeg" alt="AppImageError404-1" className="img-large" />
+              <img src="/public/Photo2.webp" alt="AppImageError404-2" className="img-small-1" />
+              <img src="/public/Photo3.webp" alt="AppImageError404-3" className="img-small-2" />
             </div>
           </div>
         </div>
