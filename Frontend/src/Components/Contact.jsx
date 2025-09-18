@@ -21,7 +21,7 @@ const teamMembers = [
     id: 2,
     name: 'Arpan Patra',
     title: 'Software Devoloper',
-    bio: 'I am a third-year B.Tech student at Haldia Institute of Technology, specializing in AI & ML. Passionate about tech and problem-solving, I’ve built strong skills in C, Python, and full-stack web development. I’m eager to apply my knowledge to real-world projects that combine data-driven insights with creative thinking, and I’m actively seeking opportunities to grow in data science and software development.',
+    bio: 'I am a B.Tech student at Haldia Institute of Technology, specializing in AI & ML. Passionate about tech and problem-solving, I’ve built strong skills in C, Python, and full-stack web development. I’m eager to apply my knowledge to real-world projects that combine data-driven insights with creative thinking, and I’m actively seeking opportunities to grow in data science and software development.',
     photoUrl: '/ContactArpanPatra.png',
     socials: {
       linkedin: 'https://www.linkedin.com/in/arpan-patra-6b0a37291/',
