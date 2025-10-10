@@ -14,8 +14,8 @@ const Header = () => {
 
         <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <li className="nav-item"><a href="/" className="nav-link" onClick={closeMenu}>Home <FaChevronDown className="icon" /></a></li>
-          <li className="nav-item"><a href="#tips" className="nav-link" onClick={closeMenu}>Product Views <FaChevronDown className="icon" /></a></li>
-          <li className="nav-item"><a href="#explore" className="nav-link" onClick={closeMenu}>Explore Our Products<FaChevronDown className="icon" /></a></li>
+          <li className="nav-item"><a href="#tips" className="nav-link" onClick={closeMenu}> Growth <FaChevronDown className="icon" /></a></li>
+          <li className="nav-item"><a href="/FarmerSellingComunityPage" className="nav-link" onClick={closeMenu}>Farmer Commiunication<FaChevronDown className="icon" /></a></li>
           <li className="nav-item"><a href="/Contact" className="nav-link" onClick={closeMenu}>Contact Us<FaChevronDown className="icon" /></a></li>
         </ul>
 
