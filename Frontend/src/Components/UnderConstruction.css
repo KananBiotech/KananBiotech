@@ -3,10 +3,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: calc(100vh - 260px); 
-  background-color: #1a1a1a;
-  color: var(--text-color, white);
+  min-height: 100vh;
+  background: none; /* Transparent background */
+  color: #0d0b0b;
   padding: 8rem 5%;
+  transition: all 0.6s ease-in-out;
 }
 
 .construction-content-wrapper {
@@ -15,52 +16,84 @@
   align-items: center;
   gap: 0.5rem;
   max-width: 600px;
+  animation: fadeInUp 1.2s ease;
 }
 
+/* ✅ Desktop & Large Screens */
 .construction-worker-logo {
-  max-width: 400px;
+  max-width: 500px;
   height: auto;
   margin-bottom: 1rem;
+  border-radius: 7rem;
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
 }
 
-.construction-title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  line-height: 1;
-  margin: 0;
-  color: var(--text-color, white); 
-  letter-spacing: 2px;
-}
-
-.construction-subtitle {
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: 1;
-  margin: 0 0 2rem 0;
-  color: #ffcc00; 
-  letter-spacing: 1px;
-}
-
-.construction-message {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
-  max-width: 450px;
+.construction-worker-logo:hover {
+  transform: scale(1.05);
 }
 
 .construction-back-button {
+  background-color: #111212;
+  color: white;
   padding: 0.8rem 2rem;
-  font-size: 0.95rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 576px) {
-  .construction-title {
-    font-size: 2.5rem;
+.construction-back-button:hover {
+  background-color: #0086a3;
+  transform: translateY(-3px);
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  .construction-subtitle {
-    font-size: 1.5rem;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/* ✅ Tablet View (768px and below) */
+@media (max-width: 768px) {
   .construction-worker-logo {
-    max-width: 200px;
+    max-width: 450px;
+    border-radius: 5rem;
+  }
+
+  .construction-back-button {
+    padding: 0.7rem 1.8rem;
+    font-size: 0.9rem;
+  }
+
+  .construction-page-container {
+    padding: 5rem 3%;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .construction-worker-logo {
+    max-width: 290px;
+    border-radius: 3rem;
+  }
+
+  .construction-back-button {
+    padding: 0.6rem 1.6rem;
+    font-size: 0.85rem;
+  }
+
+  .construction-content-wrapper {
+    max-width: 90%;
+  }
+
+  .construction-page-container {
+    padding: 4rem 2%;
   }
 }

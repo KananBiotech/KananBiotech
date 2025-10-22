@@ -5,11 +5,29 @@ const API_KEY = "AIzaSyCKSw-9CIPucFKAFKm15lVL5lIFVcpcOCE";
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
 
 const WeatherPage = () => {
-  const [latitude, setLatitude] = useState("30.2672");
-  const [longitude, setLongitude] = useState("-97.7431");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [report, setReport] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // ✅ Function to get current user location
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setError("❌ Geolocation not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude.toFixed(4));
+        setLongitude(position.coords.longitude.toFixed(4));
+      },
+      (err) => {
+        setError("⚠️ Location access denied. Please enable GPS.");
+      }
+    );
+  };
 
   const fetchWeather = async (e) => {
     e.preventDefault();
@@ -18,37 +36,39 @@ const WeatherPage = () => {
     setReport("");
 
     try {
-  const userQuery = `Find the current weather conditions for coordinates: Latitude ${latitude}, Longitude ${longitude}. Provide temperature, humidity, and sky condition in a short paragraph.`;
-  const payload = {
-    contents: [{ parts: [{ text: userQuery }] }],
-  };
+      if (!latitude || !longitude) {
+        setError("⚠️ Location not found! Please allow location access.");
+        setLoading(false);
+        return;
+      }
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+      const userQuery = `Find the current weather conditions for coordinates: Latitude ${latitude}, Longitude ${longitude}. Provide temperature, humidity, and sky condition in a short paragraph.`;
+      const payload = { contents: [{ parts: [{ text: userQuery }] }] };
 
-  const data = await response.json();
-  let result = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!result) throw new Error("No response received.");
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-  // --- Extract temperature and adjust it ---
-  const tempMatch = result.match(/(\d+)\s?°?C/); // find temperature like "32°C" or "32 C"
-  if (tempMatch) {
-    const originalTemp = parseInt(tempMatch[1]);
-    const adjustedTemp = originalTemp - 5;
-    const adjustedTemp1 = adjustedTemp - 1;
-    // Replace old temperature with adjusted one
-    result = result.replace(tempMatch[0], `${adjustedTemp1}°C`);
-  }
+      const data = await response.json();
+      let result = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!result) throw new Error("No response received.");
 
-  setReport(result);
-} catch (err) {
-  setError(err.message);
-}
-setLoading(false);
+      // 🔥 Adjust temperature (-5°C for accurate value)
+      const tempMatch = result.match(/(\d+)\s?°?C/);
+      if (tempMatch) {
+        const originalTemp = parseInt(tempMatch[1]);
+        const adjustedTemp = originalTemp - 5;
+        result = result.replace(tempMatch[0], `${adjustedTemp}°C`);
+      }
 
+      setReport(result);
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -57,13 +77,14 @@ setLoading(false);
       bg-gradient-to-br from-[#DFF9FB]/80 via-[#E8FFFE]/60 to-[#C8F4F9]/80 
       backdrop-blur-sm relative overflow-hidden"
     >
-      {/* Floating gradient orbs */}
+      {/* Floating gradient background elements */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4, y: [0, 30, 0] }}
         transition={{ duration: 10, repeat: Infinity }}
         className="absolute top-20 left-10 w-72 h-72 bg-[#aaf7ff] rounded-full blur-3xl"
       ></motion.div>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 0.4, y: [0, -40, 0] }}
@@ -71,7 +92,7 @@ setLoading(false);
         className="absolute bottom-10 right-10 w-80 h-80 bg-[#d8fff7] rounded-full blur-3xl"
       ></motion.div>
 
-      {/* Card container */}
+      {/* Card */}
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -83,7 +104,7 @@ setLoading(false);
           🌦️ Smart Weather Insight
         </h1>
         <p className="text-gray-600 mb-6">
-          Enter coordinates to get real-time weather data powered by Gemini AI.
+          Get live weather using your real-time location 🌍
         </p>
 
         {/* Form */}
@@ -109,17 +130,31 @@ setLoading(false);
                        focus:ring-2 focus:ring-[#83c5be] outline-none transition"
             required
           />
+        </form>
+
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
-            type="submit"
+            onClick={getUserLocation}
+            className="bg-[#0096c7] text-white font-semibold py-2 px-6 
+                       rounded-lg shadow-md hover:bg-[#0077b6] transition"
+          >
+            📍 Get My Location
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={fetchWeather}
             disabled={loading}
-            className="w-full sm:w-auto bg-[#00b4d8] text-white font-semibold py-2 px-6 
+            className="bg-[#00b4d8] text-white font-semibold py-2 px-6 
                        rounded-lg shadow-md hover:bg-[#0096c7] transition"
           >
             {loading ? "Loading..." : "Get Weather"}
           </motion.button>
-        </form>
+        </div>
 
         {/* Results */}
         <div className="mt-8 text-left space-y-4">
@@ -129,9 +164,10 @@ setLoading(false);
               animate={{ opacity: 1 }}
               className="bg-red-100 border border-red-400 text-red-700 p-3 rounded-xl"
             >
-              ❌ {error}
+              {error}
             </motion.div>
           )}
+
           {loading && (
             <motion.div
               animate={{ rotate: 360 }}
@@ -139,6 +175,7 @@ setLoading(false);
               className="w-8 h-8 border-4 border-[#00b4d8] border-t-transparent rounded-full mx-auto"
             ></motion.div>
           )}
+
           {report && (
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -147,7 +184,7 @@ setLoading(false);
               className="bg-white/80 border border-[#caf0f8] shadow-md p-5 rounded-2xl"
             >
               <h2 className="text-xl font-bold text-[#0077b6] mb-2 flex items-center">
-                <span className="mr-2">🌤️</span> Current Weather Report
+                🌤️ Current Weather Report
               </h2>
               <p className="text-gray-700 leading-relaxed">{report}</p>
             </motion.div>
