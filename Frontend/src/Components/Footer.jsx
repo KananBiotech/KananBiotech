@@ -1,60 +1,62 @@
 import React from 'react';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaMapMarkerAlt, FaPhone, FaEnvelope, FaYoutube } from 'react-icons/fa';
+import { useLanguage } from '../context/LanguageContext';
+import { FaLocationDot, FaPhone, FaEnvelope, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa6';
 
 const Footer = () => {
-  return (
-    <footer className="footer-container">
-      <div className="footer-content">
-        <div className="footer-column">
-          <h3 className="footer-logo">Kanan Biotech</h3>
-          <p>
-            Pioneering agricultural innovation through biotechnology to foster sustainable growth and healthier yields for a growing world.
-          </p>
-        </div>
+    const { t } = useLanguage();
+    
+    return (
+        <footer className="footer-container">
+            <div className="footer-content">
+                
+                {/* Column 1: Logo & About */}
+                <div className="footer-column">
+                    <div className="footer-logo">{t('logo')}</div>
+                    <p>
+                        {t('footer_tagline')}
+                    </p>
+                    <div className="social-icons">
+                        <a href="https://facebook.com" aria-label="Facebook"><FaFacebook /></a>
+                        <a href="https://twitter.com" aria-label="Twitter"><FaTwitter /></a>
+                        <a href="https://linkedin.com" aria-label="LinkedIn"><FaLinkedin /></a>
+                        <a href="https://instagram.com" aria-label="Instagram"><FaInstagram /></a>
+                    </div>
+                </div>
 
-        <div className="footer-column">
-          <h4>Quick Links</h4>
-          <ul className="footer-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#product-views">Product Views</a></li>
-            <li><a href="#explore">Explore Products</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-          </ul>
-        </div>
+                {/* Column 2: Quick Links */}
+                <div className="footer-column">
+                    <h3>{t('footer_links_title')}</h3>
+                    <ul className="footer-links">
+                        <li><a href="/">{t('home')}</a></li>
+                        <li><a href="/UnderConstruction">{t('growth')}</a></li>
+                        <li><a href="/UnderConstruction">{t('communication')}</a></li>
+                        <li><a href="/Contact">{t('contact')}</a></li>
+                    </ul>
+                </div>
 
-        <div className="footer-column">
-          <h4>Contact Us</h4>
-          <p className="contact-info">
-            <FaMapMarkerAlt className="contact-icon" />
-            Kolkata, West Bengal, India
-          </p>
-          <p className="contact-info">
-            <FaPhone className="contact-icon" />
-            +91 80019 49805
-          </p>
-          <p className="contact-info">
-            <FaEnvelope className="contact-icon" />
-            info@kananbiotech.com
-          </p>
-        </div>
+                {/* Column 3: Contact Info */}
+                <div className="footer-column">
+                    <h3>{t('footer_contact_title')}</h3>
+                    <div className="contact-info">
+                        <FaLocationDot className="contact-icon" />
+                        <p>{t('footer_address')}</p>
+                    </div>
+                    <div className="contact-info">
+                        <FaPhone className="contact-icon" />
+                        <p>{t('footer_phone')}</p>
+                    </div>
+                    <div className="contact-info">
+                        <FaEnvelope className="contact-icon" />
+                        <p>{t('footer_email')}</p>
+                    </div>
+                </div>
+            </div>
 
-        <div className="footer-column">
-          <h4>Follow Us</h4>
-          <div className="social-icons">
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-            <a href="#" aria-label="Twitter"><FaTwitter /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="Instagram"><FaYoutube/></a>
-          </div>
-        </div>
-      </div>
-
-      <div className="footer-bottom">
-        <p>© 2025 Kanan Biotech. All Rights Reserved.</p>
-      </div>
-    </footer>
-  );
+            <div className="footer-bottom">
+                © {new Date().getFullYear()} {t('logo')} | {t('footer_all_rights')}
+            </div>
+        </footer>
+    );
 };
 
 export default Footer;

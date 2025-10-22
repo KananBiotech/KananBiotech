@@ -1,5 +1,4 @@
 import React from 'react';
-// Note: Icon imports from 'react-icons/fa6' are correct for the modern version
 import { 
   FaMicroscope, 
   FaChartSimple, 
@@ -7,33 +6,35 @@ import {
   FaComments, 
   FaFish 
 } from 'react-icons/fa6'; 
+import { useLanguage } from '../context/LanguageContext'; // <-- IMPORT THE LANGUAGE HOOK
 
-// Data Array - The source of truth for the options
+// The options array now uses a 'key' for translation instead of the full English name.
+// This key must match the keys in your translation files (or the 'translations' object).
 const options = [
-  { name: 'Disease Diagnostic', Icon: FaMicroscope, href: '/UnderConstruction' },
-  { name: 'Aquaculture Data', Icon: FaChartSimple, href: '/UnderConstruction' },
-  { name: 'Stock Sells & Buyer', Icon: FaStore, href: '/UnderConstruction' },
-  { name: 'Aqua Consult', Icon: FaComments, href: '/UnderConstruction' },
-  { name: 'Food Protein Prep', Icon: FaFish, href: '/UnderConstruction' }, 
+  { key: 'diagnostic', Icon: FaMicroscope, href: '/UnderConstruction' },
+  { key: 'aquacultureData', Icon: FaChartSimple, href: '/UnderConstruction' },
+  { key: 'stockSells', Icon: FaStore, href: '/UnderConstruction' },
+  { key: 'aquaConsult', Icon: FaComments, href: '/UnderConstruction' },
+  { key: 'foodPrep', Icon: FaFish, href: '/UnderConstruction' }, 
 ];
 
 const QuickOptions = () => {
+  // 1. Access the translation function 't' from the context
+  const { t } = useLanguage(); 
+
   return (
-    // The main container for the options grid
     <section className="quick-options-container">
-      {/* Map through the options array to generate dynamic links */}
       {options.map((option) => (
-        // Use the option.name as the key for stability
+        // 2. Use the 'key' (the translation ID) as the React key
         <a 
-          key={option.name} 
+          key={option.key} 
           href={option.href} 
           className="quick-option-box"
         >
-          {/* Render the Icon component dynamically */}
-          <option.Icon className="icon" /> 
+          <option.Icon className="icon" />
           
-          {/* Display the option name */}
-          <span>{option.name}</span>
+          {/* 3. Use the translation function t() to display the translated name */}
+          <span>{t(option.key)}</span> 
         </a>
       ))}
     </section>

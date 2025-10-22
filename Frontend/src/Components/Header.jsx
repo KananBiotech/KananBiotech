@@ -1,81 +1,73 @@
-import React, { useState, useEffect } from 'react'; 
-import { FaChevronDown, FaMagnifyingGlass } from 'react-icons/fa6';
-
+import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { FaMagnifyingGlass, FaSeedling, FaChevronDown } from 'react-icons/fa6'; 
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); 
-  const [lastScrollY, setLastScrollY] = useState(0); 
-  
-  const closeMenu = () => setIsMenuOpen(false);
+    const { t, language: currentLanguage, changeLanguage } = useLanguage(); 
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-
-  useEffect(() => {
-    const controlHeader = () => {
-      if (isMenuOpen) {
-        setIsVisible(true);
-        return;
-      }
-
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > 100) { 
-        if (currentScrollY > lastScrollY) {
-         
-          setIsVisible(false);
-        } else {
-        
-          setIsVisible(true);
-        }
-      } else {
-       
-        setIsVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
+    const handleLanguageChange = (e) => {
+        changeLanguage(e.target.value);
     };
 
-    window.addEventListener('scroll', controlHeader);
+    return (
+        <header className="header">
+            <nav className="navbar">
+                <a className="nav-logo">
+                    Kanan Biotech
+                </a>
 
-   
-    return () => {
-      window.removeEventListener('scroll', controlHeader);
-    };
-  }, [lastScrollY, isMenuOpen]); 
-  return (
-   
-    <header className={`header ${!isVisible ? 'header--hidden' : ''}`}>
-      <nav className="navbar">
-        <a href="#home" className="nav-logo">
-          KANAN BIOTECH
-        </a>
+                <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
+  <li className="nav-item">
+    <a href="#services" className="nav-link">{t('services')}</a>
+  </li>
+  <li className="nav-item">
+    <a href="/UnderConstruction" className="nav-link">{t('about_us')}</a>
+  </li>
+  <li className="nav-item">
+    <a href="/Contact" className="nav-link">{t('contact')}</a>
+  </li>
 
-        <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          {/* ...your nav-items... */}
-          <li className="nav-item"><a href="/" className="nav-link" onClick={closeMenu}>Home <FaChevronDown className="icon" /></a></li>
-          <li className="nav-item"><a href="/UnderConstruction" className="nav-link" onClick={closeMenu}> Growth <FaChevronDown className="icon" /></a></li>
-          <li className="nav-item"><a href="/UnderConstruction" className="nav-link" onClick={closeMenu}>Farmer Commiunication<FaChevronDown className="icon" /></a></li>
-          <li className="nav-item"><a href="/Contact" className="nav-link" onClick={closeMenu}>Contact Us<FaChevronDown className="icon" /></a></li>
-        </ul>
+  <li className="nav-item flex items-center gap-3">
+    {/* Search button */}
+    <button className="search-btn" aria-label={t('search_button')}>
+      <FaMagnifyingGlass className="icon" />
+    </button>
 
-        {/* ...your action buttons... */}
-        <div className="flex items-center gap-1">
-          <button className="search-btn" aria-label="Search">
-            <FaMagnifyingGlass className="icon" />
-          </button>
-          <a href="/login" className="login-btn">
-            Log In
-          </a>
-        </div>
+    {/* Language Selector */}
+    <div className="relative">
+      <select
+        onChange={handleLanguageChange}
+        value={currentLanguage}
+        className="bg-white text-gray-900 p-2 pl-3 pr-10 rounded-[10px] cursor-pointer font-semibold text-sm border border-gray-200 shadow-sm hover:shadow transition-all duration-200"
+        aria-label={t('select_language')}
+      >
+        <option value="en">English</option>
+        <option value="bn">বাংলা (Bengali)</option>
+        <option value="hi">हिन्दी (Hindi)</option>
+      </select>
+      <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 pointer-events-none text-xs" />
+    </div>
 
-        <div className={`hamburger ${isMenuOpen ? 'active' : ''}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
-          <span className="bar"></span>
-          <span className="bar"></span>
-          <span className="bar"></span>
-        </div>
-      </nav>
-    </header>
-  );
+    {/* Login Button */}
+    <a href="/Login" className="login-btn">{t('login')}</a>
+  </li>
+</ul>
+
+
+                
+                
+                <div 
+                    className={`hamburger ${isMenuOpen ? 'active' : ''}`} 
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                </div>
+            </nav>
+        </header>
+    );
 };
 
 export default Header;

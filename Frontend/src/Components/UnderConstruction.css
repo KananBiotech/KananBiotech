@@ -3,10 +3,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: calc(100vh - 160px); 
+  min-height: calc(100vh - 260px); 
   background-color: #1a1a1a;
   color: var(--text-color, white);
-  padding: 2rem 5%;
+  padding: 8rem 5%;
 }
 
 .construction-content-wrapper {

@@ -30,74 +30,131 @@ const PageStyles = () => (
     }
 
     /* --- Header & Navigation --- */
-    .header { padding: 1.5rem 5%; }
-    .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-    .nav-logo {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: var(--text-color);
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        animation: fadeInDown 0.8s ease-out;
-    }
-    .nav-menu {
-        display: flex;
-        list-style: none;
-        gap: 2.5rem;
-        animation: fadeInDown 0.8s ease-out 0.2s;
-        animation-fill-mode: backwards;
-    }
-    .nav-link {
-        color: var(--text-color);
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        transition: color 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-    .nav-link:hover { color: var(--button-bg); }
-    .nav-link .icon { font-size: 0.7rem; }
-    .search-btn {
-        background-color: var(--button-bg);
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        animation: fadeInDown 0.8s ease-out 0.4s;
-        animation-fill-mode: backwards;
-    }
-    .search-btn:hover {
-        transform: scale(1.1);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    .search-btn .icon {
-        color: var(--primary-color);
-        font-size: 1rem;
-    }
-    .hamburger { display: none; cursor: pointer; }
-    .bar {
-        display: block;
-        width: 25px;
-        height: 3px;
-        margin: 5px auto;
-        transition: all 0.3s ease-in-out;
-        background-color: var(--text-color);
-    }
+.header { 
+  padding: 1.5rem 5%; 
+  background: transparent;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80%;
+  z-index: 20;
+  transition: all 0.4s ease;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1190px;
+  margin: 0 auto;
+}
+
+.nav-logo {
+  font-size: 1.5rem;
+  font-weight: 1000;
+  color: var(--text-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: fadeInDown 0.8s ease-out;
+}
+
+/* Align menu items neatly */
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 3.5rem;
+  animation: fadeInDown 0.8s ease-out 0.2s;
+  animation-fill-mode: backwards;
+}
+
+/* Center text links visually */
+.nav-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-link:hover { color: var(--button-bg); }
+
+/* Search Button */
+.search-btn {
+  background-color: var(--button-bg);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-btn .icon {
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+
+/* Login Button Styling */
+.login-btn {
+  background-color: var(--button-bg);
+  color: white;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile menu toggle */
+.hamburger { 
+  display: none; 
+  cursor: pointer; 
+}
+.bar {
+  display: block;
+  width: 25px;
+  height: 1px;
+  margin: 4px auto;
+  transition: all 0.3s ease-in-out;
+  background-color: var(--text-color);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav-menu {
+    flex-direction: column;
+    background: white;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 0;
+    gap: 1.5rem;
+    display: none;
+  }
+  .nav-menu.active { display: flex; }
+  .hamburger { display: block; }
+}
+
 
     /* --- Hero Section --- */
     .hero {
