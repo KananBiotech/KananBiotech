@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Components/Header'; 
 import Footer from './Components/Footer'; 
+import ServicesSection from './Components/ServicesSection';
 
 
 const PageStyles = () => (
@@ -316,14 +317,107 @@ const PageStyles = () => (
   border-top: 1px solid var(--primary-color);
   font-size: 0.9rem;
 }
+  /* --- Quick Options Section --- */
+.quick-options-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+  justify-content: center; /* Center the buttons */
+  gap: 0.75rem; /* Space between buttons */
+  padding: 1.5rem 5%; /* Padding around the container */
+  background-color: var(--primary-color); /* Match the body background */
+  border-bottom: 2px solid var(--secondary-color); /* Adds a nice separation */
+}
+.quick-option-box {
+  display: inline-flex; /* Use flex to align icon and text */
+  align-items: center;
+  gap: 0.5rem; /* Space between icon and text */
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 0.6rem 1.2rem; /* Similar to login button */
+  border-radius: 50px; /* This creates the rounded pill shape */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem; /* Slightly smaller for more text */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.quick-option-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+.quick-option-box .icon {
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+  /* --- Services Section (Cards) --- */
+.services-container {
+  display: grid;
+  /* This creates a responsive grid: */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 2.5rem 5%; /* Add some space around the cards */
+  background-color: var(--secondary-color); /* Darker background for contrast */
+}
+
+.service-card {
+  background-color: var(--button-bg); /* Use the light card color */
+  color: var(--button-text); /* Use the dark text color */
+  border-radius: 15px; /* Rounded corners like your images */
+  padding: 2rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  
+  /* Flex to stack icon and text vertically */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Space between icon and text */
+  
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.service-card .icon {
+  font-size: 2.5rem; /* Make the icon much larger */
+  color: var(--primary-color); /* Use your main theme color */
+}
+
+.service-card span {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+  .header { 
+  padding: 1.5rem 5%; 
+  position: sticky; /* Makes the header stick to the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensures it's on top of other content */
+  background-color: var(--primary-color); /* Gives it a solid background */
+  transition: transform 0.3s ease-in-out; /* Smooth slide animation */
+}
+.header--hidden {
+  transform: translateY(-100%); /* Slides the header up and out of view */
+}
+  /* --- Under Construction Page (New Style) --- */
+
+}
   `}</style>
 );
 
 function App() {
+  
   return (
     <>
       <PageStyles />
       <Header />  
+      <ServicesSection />
       <main className="hero">
         <div className="hero-bg-shapes">
           <div className="shape shape-1"></div>
@@ -344,6 +438,7 @@ function App() {
           </div>
         </div>
       </main>
+      
       <Footer />
     </>
   );
