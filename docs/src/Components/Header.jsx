@@ -14,7 +14,7 @@ const Header = () => {
         <header className="header">
             <nav className="navbar">
                 <a className="nav-logo">
-                    Kanan Biotech
+                    Kanan Biotech..
                 </a>
 
                 <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
