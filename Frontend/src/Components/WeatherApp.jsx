@@ -1,69 +1,82 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-const API_KEY = "AIzaSyCKSw-9CIPucFKAFKm15lVL5lIFVcpcOCE";
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+const MAPS_API_KEY = "AIzaSyCO9vNtPDDayFwLJoXZgCYGJkNXPd4kO84"; // 🔑 Replace with your key
+
+const mapContainerStyle = {
+  width: "100%",
+  height: "400px",
+};
+
+const defaultCenter = {
+  lat: 22.411991,
+  lng: 87.531791,
+};
 
 const WeatherPage = () => {
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [report, setReport] = useState("");
+  const [latitude, setLatitude] = useState(defaultCenter.lat);
+  const [longitude, setLongitude] = useState(defaultCenter.lng);
+  const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // ✅ Function to get current user location
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: MAPS_API_KEY,
+  });
+
+  // ✅ Get user GPS location
   const getUserLocation = () => {
     if (!navigator.geolocation) {
       setError("❌ Geolocation not supported by your browser.");
       return;
     }
-
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setLatitude(position.coords.latitude.toFixed(4));
-        setLongitude(position.coords.longitude.toFixed(4));
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
       },
-      (err) => {
-        setError("⚠️ Location access denied. Please enable GPS.");
-      }
+      () => setError("⚠️ Location access denied.")
     );
   };
 
+  // ✅ Fetch weather data
   const fetchWeather = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setReport("");
+    setWeather(null);
 
     try {
-      if (!latitude || !longitude) {
-        setError("⚠️ Location not found! Please allow location access.");
-        setLoading(false);
-        return;
-      }
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relativehumidity_2m&timezone=auto`;
+      const res = await fetch(url);
+      const data = await res.json();
 
-      const userQuery = `Find the current weather conditions for coordinates: Latitude ${latitude}, Longitude ${longitude}. Provide temperature, humidity, and sky condition in a short paragraph.`;
-      const payload = { contents: [{ parts: [{ text: userQuery }] }] };
+      if (!data.current_weather) throw new Error("Weather data not available.");
 
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      const currentTime = data.current_weather.time;
+      const times = data.hourly.time;
+      const humidityValues = data.hourly.relativehumidity_2m;
+
+      // Closest humidity timestamp
+      const currentDate = new Date(currentTime);
+      let closestIndex = 0;
+      let minDiff = Infinity;
+      times.forEach((t, i) => {
+        const diff = Math.abs(new Date(t) - currentDate);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = i;
+        }
       });
 
-      const data = await response.json();
-      let result = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!result) throw new Error("No response received.");
-
-      // 🔥 Adjust temperature (-5°C for accurate value)
-      const tempMatch = result.match(/(\d+)\s?°?C/);
-      if (tempMatch) {
-        const originalTemp = parseInt(tempMatch[1]);
-        const adjustedTemp = originalTemp - 5;
-        result = result.replace(tempMatch[0], `${adjustedTemp}°C`);
-      }
-
-      setReport(result);
+      setWeather({
+        temperature: data.current_weather.temperature,
+        windspeed: data.current_weather.windspeed,
+        winddirection: data.current_weather.winddirection,
+        humidity: humidityValues[closestIndex],
+        time: currentTime,
+      });
     } catch (err) {
       setError(err.message);
     }
@@ -71,125 +84,100 @@ const WeatherPage = () => {
     setLoading(false);
   };
 
+  if (loadError) return <div>Error loading Google Maps</div>;
+  if (!isLoaded) return <div>Loading Map...</div>;
+
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-10 
-      bg-gradient-to-br from-[#DFF9FB]/80 via-[#E8FFFE]/60 to-[#C8F4F9]/80 
-      backdrop-blur-sm relative overflow-hidden"
-    >
-      {/* Floating gradient background elements */}
+    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white px-6 py-12">
+      {/* Animated Background */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4, y: [0, 30, 0] }}
-        transition={{ duration: 10, repeat: Infinity }}
-        className="absolute top-20 left-10 w-72 h-72 bg-[#aaf7ff] rounded-full blur-3xl"
-      ></motion.div>
+        className="absolute w-72 h-72 bg-[#00ffe0]/30 rounded-full top-10 left-10 blur-3xl"
+        animate={{ y: [0, 40, 0] }}
+        transition={{ repeat: Infinity, duration: 15 }}
+      />
+      <motion.div
+        className="absolute w-96 h-96 bg-[#ff6fff]/20 rounded-full bottom-20 right-10 blur-3xl"
+        animate={{ y: [0, -50, 0] }}
+        transition={{ repeat: Infinity, duration: 18 }}
+      />
+
+      <h1 className="relative z-10 text-4xl font-extrabold mb-6 text-center">
+        🌦️ Premium Weather Dashboard
+      </h1>
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4, y: [0, -40, 0] }}
-        transition={{ duration: 12, repeat: Infinity }}
-        className="absolute bottom-10 right-10 w-80 h-80 bg-[#d8fff7] rounded-full blur-3xl"
-      ></motion.div>
-
-      {/* Card */}
-      <motion.div
-        initial={{ opacity: 0, y: -40 }}
+        className="relative z-10 w-full max-w-3xl bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl"
+        initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="bg-white/70 backdrop-blur-md shadow-2xl border border-white/30 
-                   rounded-3xl p-8 w-full max-w-xl text-center relative z-10"
       >
-        <h1 className="text-3xl font-extrabold text-[#006d77] mb-4 tracking-tight">
-          🌦️ Smart Weather Insight
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Get live weather using your real-time location 🌍
-        </p>
-
-        {/* Form */}
-        <form
-          onSubmit={fetchWeather}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+        {/* Google Map */}
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={10}
+          center={{ lat: latitude, lng: longitude }}
+          onClick={(e) => {
+            setLatitude(e.latLng.lat());
+            setLongitude(e.latLng.lng());
+          }}
         >
+          <Marker position={{ lat: latitude, lng: longitude }} />
+        </GoogleMap>
+
+        {/* Form Inputs */}
+        <form onSubmit={fetchWeather} className="flex flex-col sm:flex-row gap-4 mt-6">
           <input
             type="number"
+            step="any"
             value={latitude}
-            onChange={(e) => setLatitude(e.target.value)}
+            onChange={(e) => setLatitude(Number(e.target.value))}
             placeholder="Latitude"
-            className="px-4 py-2 w-full sm:w-1/2 rounded-lg border border-gray-300 
-                       focus:ring-2 focus:ring-[#83c5be] outline-none transition"
             required
+            className="flex-1 px-4 py-2 rounded-lg border border-white/40 bg-white/10 text-white placeholder-white focus:ring-2 focus:ring-[#00ffe0] outline-none transition"
           />
           <input
             type="number"
+            step="any"
             value={longitude}
-            onChange={(e) => setLongitude(e.target.value)}
+            onChange={(e) => setLongitude(Number(e.target.value))}
             placeholder="Longitude"
-            className="px-4 py-2 w-full sm:w-1/2 rounded-lg border border-gray-300 
-                       focus:ring-2 focus:ring-[#83c5be] outline-none transition"
             required
+            className="flex-1 px-4 py-2 rounded-lg border border-white/40 bg-white/10 text-white placeholder-white focus:ring-2 focus:ring-[#00ffe0] outline-none transition"
           />
-        </form>
-
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={getUserLocation}
-            className="bg-[#0096c7] text-white font-semibold py-2 px-6 
-                       rounded-lg shadow-md hover:bg-[#0077b6] transition"
-          >
-            📍 Get My Location
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={fetchWeather}
-            disabled={loading}
-            className="bg-[#00b4d8] text-white font-semibold py-2 px-6 
-                       rounded-lg shadow-md hover:bg-[#0096c7] transition"
+          <button
+            type="submit"
+            className="bg-[#00ffe0] text-gray-900 font-semibold px-6 py-2 rounded-lg shadow-lg hover:bg-[#00c2b3] transition"
           >
             {loading ? "Loading..." : "Get Weather"}
-          </motion.button>
-        </div>
+          </button>
+        </form>
 
-        {/* Results */}
-        <div className="mt-8 text-left space-y-4">
-          {error && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-red-100 border border-red-400 text-red-700 p-3 rounded-xl"
-            >
-              {error}
-            </motion.div>
-          )}
+        <button
+          onClick={getUserLocation}
+          className="w-full mt-4 bg-[#ff6fff] text-white font-semibold px-6 py-2 rounded-lg shadow-lg hover:bg-[#d653e5] transition"
+        >
+          📍 Use My Location
+        </button>
 
-          {loading && (
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="w-8 h-8 border-4 border-[#00b4d8] border-t-transparent rounded-full mx-auto"
-            ></motion.div>
-          )}
+        {/* Error Message */}
+        {error && <p className="text-red-400 mb-4 text-center font-medium">{error}</p>}
 
-          {report && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="bg-white/80 border border-[#caf0f8] shadow-md p-5 rounded-2xl"
-            >
-              <h2 className="text-xl font-bold text-[#0077b6] mb-2 flex items-center">
-                🌤️ Current Weather Report
-              </h2>
-              <p className="text-gray-700 leading-relaxed">{report}</p>
-            </motion.div>
-          )}
-        </div>
+        {/* Weather Card */}
+        {weather && (
+          <motion.div
+            className="bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl p-6 shadow-xl text-center space-y-3 mt-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl font-bold mb-2">🌤️ Current Weather</h2>
+            <p>⏰ Time: {weather.time}</p>
+            <p>🌡 Temperature: {weather.temperature} °C</p>
+            <p>💧 Humidity: {weather.humidity} %</p>
+            <p>💨 Wind Speed: {weather.windspeed} km/h</p>
+            <p>🧭 Wind Direction: {weather.winddirection}°</p>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );
